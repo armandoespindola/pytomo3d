@@ -36,19 +36,25 @@ def count_windows(windows):
     """
     nchans = 0
     nwins = 0
+    nwins_comp = {}
     for stainfo in windows.values():
-        for chaninfo in stainfo.values():
+        for chan, chaninfo in stainfo.items():
+            comp = chan.split(".")[-1][-1]
             _nw = len(chaninfo)
             if _nw == 0:
                 continue
             nchans += 1
             nwins += _nw
-    return nchans, nwins
+            if comp not in nwins_comp:
+                nwins_comp[comp] = 0
+            nwins_comp[comp] += _nw
+
+    return nchans, nwins, nwins_comp
 
 
 def print_window_filter_summary(old_windows, new_windows):
-    nchans_old, nwins_old = count_windows(old_windows)
-    nchans_new, nwins_new = count_windows(new_windows)
+    nchans_old, nwins_old, nwins_comp_old = count_windows(old_windows)
+    nchans_new, nwins_new, nwins_comp_new = count_windows(new_windows)
     if nchans_old:
         nchans_rej = (nchans_old - nchans_new) / nchans_old
     else:
@@ -62,6 +68,8 @@ def print_window_filter_summary(old_windows, new_windows):
           % (nchans_old, nchans_new, nchans_rej * 100))
     print("Number of windows old and new:  %d --> %d(rej: %.2f %%)"
           % (nwins_old, nwins_new, nwins_rej * 100))
+    print("Old Component window counts: %s" % (nwins_comp_old))
+    print("New Component window counts: %s" % (nwins_comp_new))
     return {"nchannels_old": nchans_old, "nwindows_old": nwins_old,
             "nchannels_new": nchans_new, "nwindows_new": nwins_new,
             "channel_rejection_percentage": '%.2f' % (nchans_rej * 100),
@@ -219,6 +227,103 @@ def filter_measurements_on_bounds(windows, measurements, bounds):
             new_meas[sta] = new_sta_meas
 
     return new_wins, new_meas
+
+
+def get_component_keep_flag(dt_means, dt_stds, dlna_means, dlna_stds,
+                            comp_config):
+    """
+    Check if the mean and std of dt and dlna are within the range
+    provided by the user. The default values are true. If the user
+    doesn't provide any parameters, then all values will be kept
+    as true
+    """
+    def _check_all_parameters_valid(_config):
+        ts_range = _config["tshift_mean_range"]
+        if ts_range[0] >= ts_range[1]:
+            raise ValueError("tshift_mean_range error: %s" % ts_range)
+        ts_std_level = _config["tshift_std_level"]
+        if ts_std_level <= 0:
+            raise ValueError("tshift_std_level(%f) <= 0" % ts_std_level)
+        dlna_range = _config["dlna_mean_range"]
+        if dlna_range[0] >= dlna_range[1]:
+            raise ValueError("dlna_mean_range error: %s" % dlna_range)
+        dlna_std_level = _config["dlna_std_level"]
+        if dlna_std_level <= 0:
+            raise ValueError("dlna_std_level(%f) <= 0" % dlna_std_level)
+
+    def _check_in_range(v, vrange):
+        if v > vrange[0] and v < vrange[1]:
+            return True
+        else:
+            return False
+
+    flags = {}
+    for comp in dt_means:
+        flags[comp] = True
+
+    print("-" * 20)
+    for comp in dt_means:
+        if "tshift_mean_range" not in comp_config[comp]:
+            # skip if user does not provide the parameter
+            print("Not filtering on mean and std on component(%s) since"
+                  "no user parameter(tshift_mean_range) provided" % comp)
+            continue
+        _config = comp_config[comp]
+        _check_all_parameters_valid(_config)
+        if not _check_in_range(dt_means[comp], _config["tshift_mean_range"]):
+            print("Reject component(%s) due to dt mean(%f) out of range: %s"
+                  % (comp, dt_means[comp], _config["tshift_mean_range"]))
+            flags[comp] = False
+            continue
+
+        if dt_stds[comp] > _config["tshift_std_level"]:
+            print("Reject component(%s) due to dt std(%f) larger than "
+                  "threshold %f"
+                  % (comp, dt_stds[comp], _config["tshift_std_level"]))
+            flags[comp] = False
+            continue
+
+        if not _check_in_range(dlna_means[comp], _config["dlna_mean_range"]):
+            print("Reject component(%s) due to dlna mean(%f) out of range: %s"
+                  % (comp, dlna_means[comp], _config["dlna_mean_range"]))
+            flags[comp] = False
+            continue
+
+        if dlna_stds[comp] > _config["dlna_std_level"]:
+            print("Reject component(%s) due to dlna std(%f) larger than "
+                  "threshold %f"
+                  % (comp, dlna_stds[comp], _config["dlna_std_level"]))
+            flags[comp] = False
+            continue
+
+    pprint("component keep flag:")
+    pprint(flags)
+    return flags
+
+
+def get_measurement_final_bounds(
+        comp_config, dt_means, dt_stds, dlna_means, dlna_stds):
+    # get the measurement bounds
+    final_bounds = {}
+    for comp in dt_means:
+        print("-" * 20 + "\nComponent: %s" % comp)
+        user_bound = get_user_bound(comp_config[comp])
+        dt_std_bound = get_std_bound(dt_means[comp], dt_stds[comp],
+                                     comp_config[comp]["std_ratio"])
+        dlna_std_bound = get_std_bound(dlna_means[comp], dlna_stds[comp],
+                                       comp_config[comp]["std_ratio"])
+        dt_bound = [max(dt_std_bound[0], user_bound[0]),
+                    min(dt_std_bound[1], user_bound[1])]
+        dlna_bound = [max(dlna_std_bound[0], user_bound[2]),
+                      min(dlna_std_bound[1], user_bound[3])]
+        final_bounds[comp] = {"dt": dt_bound, "dlna": dlna_bound}
+        print("user specified bound [dt_min, dt_max, dlna_min, dlna_max]: %s"
+              % user_bound)
+        print("std bound dt: %s -- dlna: %s" % (dt_std_bound, dlna_std_bound))
+        print("final dt bound: %s" % dt_bound)
+        print("final dlna bound: %s" % dlna_bound)
+
+    return final_bounds
 
 
 def filter_windows_on_measurements(windows, measurements, measure_config):
