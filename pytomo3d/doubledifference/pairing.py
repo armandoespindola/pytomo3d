@@ -106,7 +106,6 @@ def similar_pairs(data, threshold, old_pairs):
         data_j = data[pair_j]
         corr = np.correlate(data_i, data_j, "full")
         ratio = max(corr)/np.sqrt(sum(data_i**2)*sum(data_j**2))
-        # print(np.sqrt(sum(data_i**2)*sum(data_j**2)))
         is_paired = abs(ratio) > threshold
         return ratio, is_paired
 
@@ -166,7 +165,7 @@ def find_weights(pairs):
         counts = Counter(all_paired_windows)
         for pair in comp_pairs:
             w_i = 1/(counts[pair["window_id_i"]] + 1)
-            w_j = 1/(counts[pair["window_id_i"]] + 1)
+            w_j = 1/(counts[pair["window_id_j"]] + 1)
             # w_i = 1/len(comp_pairs)
             # w_j = 1/len(comp_pairs)
             pair["weight_i"] = w_i
