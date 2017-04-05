@@ -54,6 +54,52 @@ def calculate_adjoint_pair(pair, adj_src_type, config, windows, obsd, synt):
     return {(sta_i, sta_j): (adj_i, adj_j)}
 
 
+def calculate_measure_pair(pair, adj_src_type, config, windows, obsd, synt):
+    """Calculate adjoint sources for pair
+
+    :param pair: pair object
+    :type pair: dict
+    :param adj_src_type: adjoint source type
+    :type adj_src_type: str
+    :param config: adjoint source config
+    :type config: pyadjoint.Config
+    :param windows: windows
+    :type windows: dict
+    :param obsd: obsd data dict
+    :type obsd: dict
+    :param synt: synt data dict
+    :type synt: dict
+    :returns: named adjoint sources
+    :rtype: dict
+
+    """
+    win_id_i = pair["window_id_i"]
+    win_id_j = pair["window_id_j"]
+
+    win_i = get_adj_window(windows, win_id_i)
+    win_j = get_adj_window(windows, win_id_j)
+
+    sta_i, sta_j = get_stanames_of_pair(pair)
+
+    meas_i, meas_j = calculate_adjoint_source_DD(adj_src_type,
+                                                 obsd[sta_i], synt[sta_i],
+                                                 obsd[sta_j], synt[sta_j],
+                                                 config,
+                                                 win_i, win_j,
+                                                 adjoint_src=False)
+
+    meas_i = meas_i.measurement[0]
+    meas_j = meas_j.measurement[0]
+
+    del meas_i["ddt_w"]
+    del meas_j["ddt_w"]
+
+    meas_i["misfit"] *= pair["weight_i"]
+    meas_j["misfit"] *= pair["weight_j"]
+
+    return {(win_id_i, win_id_j): (meas_i, meas_j)}
+
+
 def add_adjoint_sources(a, b):
     """Add two adjoint sources
 
