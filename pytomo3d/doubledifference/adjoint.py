@@ -48,10 +48,7 @@ def calculate_adjoint_pair(pair, adj_src_type, config, windows, obsd, synt):
                                                config,
                                                win_i, win_j)
 
-    adj_i = multiply_adjoint_source(pair["weight_i"], adj_i)
-    adj_j = multiply_adjoint_source(pair["weight_j"], adj_j)
-
-    return {(sta_i, sta_j): (adj_i, adj_j)}
+    return {(win_id_i, win_id_j): (adj_i, adj_j)}
 
 
 def calculate_measure_pair(pair, adj_src_type, config, windows, obsd, synt):
@@ -91,11 +88,8 @@ def calculate_measure_pair(pair, adj_src_type, config, windows, obsd, synt):
     meas_i = meas_i.measurement[0]
     meas_j = meas_j.measurement[0]
 
-    del meas_i["ddt_w"]
-    del meas_j["ddt_w"]
-
-    meas_i["misfit"] *= pair["weight_i"]
-    meas_j["misfit"] *= pair["weight_j"]
+    meas_i.pop("ddt_w", None)
+    meas_j.pop("ddt_w", None)
 
     return {(win_id_i, win_id_j): (meas_i, meas_j)}
 
