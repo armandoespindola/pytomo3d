@@ -37,7 +37,7 @@ def plot_window_figure(figure_dir, figure_id, ws, _verbose=False,
     outfn = "%s.%s" % (figure_id, figure_format)
     figfn = os.path.join(figure_dir, outfn)
     if _verbose:
-        print "Output window figure:", figfn
+        print("Output window figure:", figfn)
     ws.plot(figfn)
 
 
@@ -159,7 +159,7 @@ def window_on_trace(obs_tr, syn_tr, config, station=None,
     try:
         windows = ws.select_windows()
     except Exception as err:
-        print("Error(%s): %s" % (obs_tr.id, err))
+        print(("Error(%s): %s" % (obs_tr.id, err)))
         windows = []
 
     if figure_mode:
@@ -167,7 +167,7 @@ def window_on_trace(obs_tr, syn_tr, config, station=None,
                            figure_format=figure_format)
 
     if _verbose:
-        print("Station %s picked %i windows" % (obs_tr.id, len(windows)))
+        print(("Station %s picked %i windows" % (obs_tr.id, len(windows))))
 
     return windows
 
@@ -227,7 +227,7 @@ def window_on_stream(observed, synthetic, config_dict, station=None,
         else:
             raise ValueError("The length of Config_dict.keys()[%s] should be "
                              "either 1 or 3, for example, ['E', 'N', 'Z'] "
-                             "or ['BHE', 'BHN', 'BHZ']" % config_dict.keys())
+                             "or ['BHE', 'BHN', 'BHZ']" % list(config_dict.keys()))
 
         for obs_tr in obs:
             component = obs_tr.stats.channel[-1]
@@ -236,8 +236,8 @@ def window_on_stream(observed, synthetic, config_dict, station=None,
                                           network=obs_tr.stats.network,
                                           component=component)[0]
             except Exception as err:
-                print("Couldn't find corresponding synt for obsd trace(%s):"
-                      "%s" % (obs_tr.id, err))
+                print(("Couldn't find corresponding synt for obsd trace(%s):"
+                      "%s" % (obs_tr.id, err)))
                 continue
 
             config = copy.deepcopy(config_base)

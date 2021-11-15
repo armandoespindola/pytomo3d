@@ -8,7 +8,7 @@ from pytomo3d.utils.io import dump_json
 
 def assign_source_to_points(sources):
     points = []
-    for event, cat in sources.iteritems():
+    for event, cat in sources.items():
         origin = cat[0].preferred_origin()
         point = SpherePoint(origin.latitude, origin.longitude, tag=event,
                             weight=1.0)
@@ -25,8 +25,8 @@ def normalize_source_weights(points, wcounts):
         wsum += p.weight * wcounts[p.tag]
         wcounts_sum += wcounts[p.tag]
 
-    print("The summation of window counts: %d" % wcounts_sum)
-    print("The iniital summation(weight * window_counts): %f" % wsum)
+    print(("The summation of window counts: %d" % wcounts_sum))
+    print(("The iniital summation(weight * window_counts): %f" % wsum))
     factor = 1.0 / wsum
 
     weights = {}
@@ -39,8 +39,8 @@ def normalize_source_weights(points, wcounts):
         wsum += wcounts[event] * weights[event]
     if not np.isclose(wsum, 1.0):
         raise ValueError("Error normalize source weights: %f" % wsum)
-    print("The normalized sum is: %f" % wsum)
-    print("Final weights: %s" % weights)
+    print(("The normalized sum is: %f" % wsum))
+    print(("Final weights: %s" % weights))
     return weights
 
 
@@ -64,8 +64,8 @@ def calculate_source_weights_on_location(
         drop_ratio=0.95, plot=plot_flag,
         figname=scan_figname)
 
-    print("Reference distance and condition number: %f, %f"
-          % (ref_distance, cond_number))
+    print(("Reference distance and condition number: %f, %f"
+          % (ref_distance, cond_number)))
 
     if plot_flag:
         map_figname = os.path.join(
@@ -76,7 +76,7 @@ def calculate_source_weights_on_location(
 
 
 def dump_weights_to_txt(weights, outputfile):
-    events = weights.keys()
+    events = list(weights.keys())
     events.sort()
 
     with open(outputfile, 'w') as fh:
@@ -90,10 +90,10 @@ def calculate_source_weights(info, param, output_file, _verbose=False):
     strategy I, in which case the source weightings needs to be
     calculated separately.
     """
-    print("=" * 10 + " Param " + "=" * 10)
+    print(("=" * 10 + " Param " + "=" * 10))
     pprint(param)
-    sources = {k: v["source"] for k, v in info.iteritems()}
-    wcounts = {k: v["window_counts"] for k, v in info.iteritems()}
+    sources = {k: v["source"] for k, v in info.items()}
+    wcounts = {k: v["window_counts"] for k, v in info.items()}
 
     outputdir = os.path.dirname(output_file)
     if not os.path.exists(outputdir):
@@ -104,15 +104,15 @@ def calculate_source_weights(info, param, output_file, _verbose=False):
 
     points = assign_source_to_points(sources)
     if param["flag"]:
-        print("=" * 10 + " Weight source on location " + "=" * 10)
+        print(("=" * 10 + " Weight source on location " + "=" * 10))
         ref_distance, cond_num = calculate_source_weights_on_location(
             points, param["search_ratio"], param["flag"], outputdir)
-    print("=" * 10 + " Normalize weights " + "=" * 10)
+    print(("=" * 10 + " Normalize weights " + "=" * 10))
     weights = normalize_source_weights(points, wcounts)
 
     # write weights to txt(for summing kernels)
-    print("=" * 10 + " Write weights " + "=" * 10)
-    print("Output weight file: %s" % output_file)
+    print(("=" * 10 + " Write weights " + "=" * 10))
+    print(("Output weight file: %s" % output_file))
     dump_weights_to_txt(weights, output_file)
 
     # generate log file
@@ -120,5 +120,5 @@ def calculate_source_weights(info, param, output_file, _verbose=False):
                    "cond_num": cond_num, "weight_flag": param["flag"],
                    "serach_ratio": param["search_ratio"]}
     outputfn = os.path.join(outputdir, "source_weights.log.json")
-    print("Output log file: %s" % outputfn)
+    print(("Output log file: %s" % outputfn))
     dump_json(log_content, outputfn)

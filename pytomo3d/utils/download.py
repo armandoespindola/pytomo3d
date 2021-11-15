@@ -70,8 +70,8 @@ def download_waveform(stations, starttime, endtime, outputdir=".",
             else:
                 error_code = 1
         except Exception as e:
-            print("Failed to download waveform '%s' due to: %s"
-                  % (station_id, str(e)))
+            print(("Failed to download waveform '%s' due to: %s"
+                  % (station_id, str(e))))
             error_code = 2
 
         _status[station_id] = error_code
@@ -111,8 +111,8 @@ def download_stationxml(stations, starttime, endtime, outputdir=".",
             else:
                 error_code = 1
         except Exception as e:
-            print("Failed to download StationXML '%s' due to: %s"
-                  % (station_id, str(e)))
+            print(("Failed to download StationXML '%s' due to: %s"
+                  % (station_id, str(e))))
             error_code = 2
         _status[station_id] = error_code
 

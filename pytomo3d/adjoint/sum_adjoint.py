@@ -9,7 +9,7 @@ Utility functions for sum_adjoint in pypaw
     GNU Lesser General Public License, version 3 (LGPLv3)
     (http://www.gnu.org/licenses/lgpl-3.0.en.html)
 """
-from __future__ import print_function, division, absolute_import
+
 import numpy as np
 import copy
 from obspy import UTCDateTime
@@ -53,11 +53,11 @@ def check_events_consistent(events):
     """
     Check all events are consistent(same with each other)
     """
-    fn_base = events.keys()[0]
+    fn_base = list(events.keys())[0]
     event_base = events[fn_base]
 
     diffs = []
-    for asdf_fn, event in events.iteritems():
+    for asdf_fn, event in events.items():
         if event_base != event:
             diffs.append(asdf_fn)
 
@@ -191,7 +191,7 @@ def rotate_adjoint_sources(old_adjs, stations, event_latitude,
     done_sta_list = []
     new_adjs = {}
 
-    for adj_id, adj in old_adjs.iteritems():
+    for adj_id, adj in old_adjs.items():
         network = adj.network
         station = adj.station
         sta_tag = "%s_%s" % (network, station)

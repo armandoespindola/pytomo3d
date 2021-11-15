@@ -25,15 +25,15 @@ teststaxml = obspy.read_inventory(staxmlfile)
 def test_process_obsd():
 
     true_type = {
-        u'IU.KBL..BHZ': {
+        'IU.KBL..BHZ': {
             'latitude': 34.5408, 'depth': 7.0, 'elevation': 1913.0,
             'longitude': 69.0432,
             'sensor': 'Streckeisen STS-2/VBB Seismometer'},
-        u'IU.KBL..BHN': {
+        'IU.KBL..BHN': {
             'latitude': 34.5408, 'depth': 7.0, 'elevation': 1913.0,
             'longitude': 69.0432,
             'sensor': 'Streckeisen STS-2/VBB Seismometer'},
-        u'IU.KBL..BHE': {
+        'IU.KBL..BHE': {
             'latitude': 34.5408, 'depth': 7.0, 'elevation': 1913.0,
             'longitude': 69.0432,
             'sensor': 'Streckeisen STS-2/VBB Seismometer'}

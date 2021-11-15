@@ -10,7 +10,7 @@ This script extract channel instrument type from obspy.inventory
     (http://www.gnu.org/licenses/lgpl-3.0.en.html)
 """
 
-from __future__ import print_function, division, absolute_import
+
 import os
 from collections import defaultdict
 from obspy import Inventory
@@ -21,8 +21,7 @@ def safe_load_staxml(staxmlfile):
     try:
         inv = read_inventory(staxmlfile)
     except Exception as exp:
-        raise("Failed to parse staxml file(%s) due to: %s"
-              % (staxmlfile, exp))
+        raise "Failed to parse staxml file(%s) due to: %s"
     return inv
 
 

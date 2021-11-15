@@ -112,7 +112,7 @@ def calculate_adjsrc_on_stream(observed, synthetic, windows, config,
 
     adjsrcs_list = []
 
-    for chan_win in windows.itervalues():
+    for chan_win in windows.values():
         if len(chan_win) == 0:
             continue
 
@@ -152,7 +152,7 @@ def calculate_and_process_adjsrc_on_stream(
     # check total number of windows. If total number of
     # window is 0, return None
     nwin_total = 0
-    for value in windows.itervalues():
+    for value in windows.values():
         nwin_total += len(value)
     if nwin_total == 0:
         return
@@ -194,7 +194,7 @@ def measure_adjoint_on_stream(
     """
 
     nwin_total = 0
-    for value in windows.itervalues():
+    for value in windows.values():
         nwin_total += len(value)
     if nwin_total == 0:
         return

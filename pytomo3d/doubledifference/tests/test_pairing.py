@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import division, absolute_import
-from __future__ import print_function, unicode_literals
+
+
 
 
 from pytomo3d.doubledifference.pairing import (create_all_pairs,
@@ -81,7 +81,7 @@ def windowed_data():
         np.exp(-(times-30))
     ]
     all_windows = windows()
-    for window, window_data in zip(all_windows["Z"].keys(), data):
+    for window, window_data in zip(list(all_windows["Z"].keys()), data):
         sample_data[window] = window_data
     return sample_data
 

@@ -26,8 +26,8 @@ def component_based_windows_data(windows_data):
 
     """
     all_windows = {}
-    for station, comps in windows_data.iteritems():
-        for comp, windows in comps.iteritems():
+    for station, comps in windows_data.items():
+        for comp, windows in comps.items():
             c = comp[-1]
             if c not in all_windows:
                 all_windows[c] = {}
@@ -48,8 +48,8 @@ def convert_to_sta_based_windows(comp_based_windows):
 
     """
     windows_data = {}
-    for comp, comp_windows in comp_based_windows.iteritems():
-        for wname, wdata in comp_windows.iteritems():
+    for comp, comp_windows in comp_based_windows.items():
+        for wname, wdata in comp_windows.items():
             compname = wname.split(":")[0]
             staname = ".".join(compname.split(".")[:2])
             # if there is a data for this station
@@ -113,10 +113,10 @@ def filter_paired_windows(windows, pairs):
     """
     paired_windows = {}
     single_windows = {}
-    for comp, comp_windows in windows.iteritems():
+    for comp, comp_windows in windows.items():
         paired_windows[comp] = {}
         single_windows[comp] = {}
-        for wname, wdata in comp_windows.iteritems():
+        for wname, wdata in comp_windows.items():
             is_paired = False
             for pair in pairs[comp]:
                 if pair["window_id_i"] == wname or \

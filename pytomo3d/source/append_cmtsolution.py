@@ -8,7 +8,7 @@ Functions that append CMTSOLUTION information into catalog
     GNU Lesser General Public License, version 3 (LGPLv3)
     (http://www.gnu.org/licenses/lgpl-3.0.en.html)
 """
-from __future__ import print_function, division
+
 import obspy
 from obspy.core.event.source import ResourceIdentifier
 from obspy.core.event import Catalog, Event

@@ -103,9 +103,9 @@ def test_convert_adjs_to_stream():
     true_keys = ["II.AAK..BHZ", "II.AAK..BHR", "II.AAK..BHT"]
     st, meta = pa.convert_adjs_to_stream(adjsrcs)
     assert len(meta) == 3
-    keys = meta.keys()
+    keys = list(meta.keys())
     assert set(keys) == set(true_keys)
-    for m in meta.itervalues():
+    for m in meta.values():
         assert m["adj_src_type"] == "cc_traveltime_misfit"
         npt.assert_almost_equal(m["misfit"], 0.0)
         npt.assert_almost_equal(m["min_period"], 17.0)

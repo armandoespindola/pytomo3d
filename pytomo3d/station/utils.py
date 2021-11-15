@@ -41,7 +41,7 @@ def write_stations_file(sta_dict, filename="STATIONS"):
     """
     with open(filename, 'w') as fh:
         od = collections.OrderedDict(sorted(sta_dict.items()))
-        for _sta_id, _sta in od.iteritems():
+        for _sta_id, _sta in od.items():
             network, station = _sta_id.split(".")
             _lat = _sta[0]
             _lon = _sta[1]

@@ -18,7 +18,7 @@ def _upper_level(path, nlevel=4):
 # Most generic way to get the data folder path.
 TESTBASE_DIR = _upper_level(
     os.path.abspath(inspect.getfile(inspect.currentframe())), 4)
-print TESTBASE_DIR
+print(TESTBASE_DIR)
 DATA_DIR = os.path.join(TESTBASE_DIR, "tests", "data")
 
 obsfile = os.path.join(DATA_DIR, "proc", "IU.KBL.obs.proc.mseed")

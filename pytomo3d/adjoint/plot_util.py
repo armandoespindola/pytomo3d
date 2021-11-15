@@ -32,7 +32,7 @@ def plot_adjoint_and_data(adjsrc, win_times, obs_tr, syn_tr):
 
     plt.grid()
     plt.legend(fancybox=True, framealpha=0.5)
-    ylim = max(map(abs, plt.ylim()))
+    ylim = max(list(map(abs, plt.ylim())))
     plt.ylim(-ylim, ylim)
     for win in win_times:
         l = win[0]
@@ -47,8 +47,8 @@ def plot_adjoint_and_data(adjsrc, win_times, obs_tr, syn_tr):
              label="Adjoint Source")
     plt.grid()
     plt.legend(fancybox=True, framealpha=0.5)
-    xlim = max(map(abs, plt.xlim()))
-    ylim = max(map(abs, plt.ylim()))
+    xlim = max(list(map(abs, plt.xlim())))
+    ylim = max(list(map(abs, plt.ylim())))
     plt.ylim(-ylim, ylim)
     for win in win_times:
         l = win[0]

@@ -10,10 +10,10 @@ def extract_usable_stations_from_one_period(measures):
     """ Extract usable stations and channels from measurements file """
     stations = []
     channels = []
-    for sta, sta_info in measures.iteritems():
+    for sta, sta_info in measures.items():
         n_measure_sta = 0
         # append each usable channel
-        for chan, chan_info in sta_info.iteritems():
+        for chan, chan_info in sta_info.items():
             n_measure_chan = len(chan_info)
             if n_measure_chan > 0:
                 channels.append(chan)
@@ -29,16 +29,16 @@ def extract_usable_stations_from_measurements(measurements):
     stations = set()
     channels = set()
 
-    for period, measures in measurements.iteritems():
+    for period, measures in measurements.items():
         stations_one_period, channels_one_period = \
             extract_usable_stations_from_one_period(measures)
-        print("[Period:%s]Number of stations and channels: %d, %d" %
-              (period, len(stations_one_period), len(channels_one_period)))
+        print(("[Period:%s]Number of stations and channels: %d, %d" %
+              (period, len(stations_one_period), len(channels_one_period))))
         stations = stations.union(set(stations_one_period))
         channels = channels.union(set(channels_one_period))
 
-    print("Total number of station and channels: %d, %d" %
-          (len(stations), len(channels)))
+    print(("Total number of station and channels: %d, %d" %
+          (len(stations), len(channels))))
 
     return stations, channels
 
@@ -81,7 +81,7 @@ def prepare_adjoint_station_information(usable_channels, stations):
                 continue
 
     adjoint_stations = {}
-    for sta_id, sta_info in adjoint_stations_info.iteritems():
+    for sta_id, sta_info in adjoint_stations_info.items():
         adjoint_stations[sta_id] = [
             sta_info["latitude"], sta_info["longitude"],
             sta_info["elevation"], sta_info["depth"]]
@@ -97,8 +97,8 @@ def check_adjoint_stations_consistency(adjoint_stations, usable_stations):
     set1 = set(adjoint_stations.keys())
     set2 = set(usable_stations)
     if set1 != set2:
-        print("Stations more: %s" % (set1 - set2))
-        print("Stations less: %s" % (set2 - set1))
+        print(("Stations more: %s" % (set1 - set2)))
+        print(("Stations less: %s" % (set2 - set1)))
         raise ValueError("Inconsistent between adjoint_stations and "
                          "usable_stations")
 
@@ -130,7 +130,7 @@ def benchmark_stations(adjoint_stations):
         if key not in adjoint_stations:
             continue
         if not is_close(adjoint_stations[key], true_values[key]):
-            print("Fails at benchmark station %s" % key)
+            print(("Fails at benchmark station %s" % key))
             nfail += 1
         else:
             npass += 1
@@ -171,7 +171,7 @@ def generate_adjoint_stations(measurements, stations, outputfn,
 
     if benchmark_flag:
         npass = benchmark_stations(adjoint_stations)
-        print("Benchmark passed at level: %d" % npass)
+        print(("Benchmark passed at level: %d" % npass))
 
-    print("Write output station file in: %s" % outputfn)
+    print(("Write output station file in: %s" % outputfn))
     write_stations_file(adjoint_stations, outputfn)

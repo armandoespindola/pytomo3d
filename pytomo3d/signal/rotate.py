@@ -10,7 +10,7 @@ It can rotate `12`, `EN` and `RT`, forward and backward.
     GNU Lesser General Public License, version 3 (LGPLv3)
     (http://www.gnu.org/licenses/lgpl-3.0.en.html)
 """
-from __future__ import print_function
+
 import numpy as np
 from obspy.geodetics import gps2dist_azimuth
 from obspy import Stream
@@ -393,7 +393,7 @@ def rotate_stream(st, event_latitude, event_longitude,
     # "00" and "10").
     sorted_st_dict = sort_stream_by_station(st)
 
-    for sta_stream in sorted_st_dict.itervalues():
+    for sta_stream in sorted_st_dict.values():
         # loop over stations
         nw = sta_stream[0].stats.network
         station = sta_stream[0].stats.station

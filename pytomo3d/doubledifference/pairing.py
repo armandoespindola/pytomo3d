@@ -8,8 +8,8 @@
     (http://www.gnu.org/licenses/lgpl-3.0.en.html)
 """
 
-from __future__ import division, absolute_import
-from __future__ import print_function, unicode_literals
+
+
 
 
 from .utils import get_dist_in_km, get_stanames_of_pair, deconstruct_winname
@@ -31,10 +31,10 @@ def create_all_pairs(windows):
 
     """
     pairs = {}
-    for comp, comp_windows in windows.iteritems():
+    for comp, comp_windows in windows.items():
         pairs[comp] = [{"window_id_i": i,
                         "window_id_j": j}
-                       for i, j in combinations(comp_windows.keys(), 2)]
+                       for i, j in combinations(list(comp_windows.keys()), 2)]
     return pairs
 
 
@@ -42,7 +42,7 @@ def _reduce_pairs(pairing_func, pairing_key, old_pairs=None):
     # General function for pairing
     # It reduces pairs to ones which satisfies pairing_func
     pairs = {}
-    for comp, comp_pairs in old_pairs.iteritems():
+    for comp, comp_pairs in old_pairs.items():
         pairs[comp] = []
         for pair in comp_pairs:
             sta_i, sta_j = get_stanames_of_pair(pair)
@@ -132,9 +132,9 @@ def phase_pairs(windows, phases, old_pairs):
         return paired_phase, is_paired
 
     phase_data = {}
-    for comp, comp_windows in windows.iteritems():
+    for comp, comp_windows in windows.items():
         phase_data[comp] = {}
-        for winname, window in comp_windows.iteritems():
+        for winname, window in comp_windows.items():
             phase_data[comp][winname] = [phase["phase_name"]
                                          for phase in window["phase_arrivals"]]
 
@@ -144,7 +144,7 @@ def phase_pairs(windows, phases, old_pairs):
 def _get_windowed_traces(traces, windows, pairs):
     # Get the data for paired windows by windowing the traces
     windowed_traces = {}
-    for comp, comp_pairs in pairs.iteritems():
+    for comp, comp_pairs in pairs.items():
         for winnames in comp_pairs:
             for winname in [winnames["window_id_i"], winnames["window_id_j"]]:
                 if winname not in windowed_traces:
@@ -157,7 +157,7 @@ def _get_windowed_traces(traces, windows, pairs):
 
 
 def find_weights(pairs):
-    for comp, comp_pairs in pairs.iteritems():
+    for comp, comp_pairs in pairs.items():
         all_paired_windows = []
         for pair in comp_pairs:
             all_paired_windows.append(pair["window_id_i"])
