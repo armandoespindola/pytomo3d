@@ -8,10 +8,6 @@
     (http://www.gnu.org/licenses/lgpl-3.0.en.html)
 """
 
-
-
-
-
 from .utils import get_dist_in_km, get_stanames_of_pair, deconstruct_winname
 from .windows import get_windowed_trace
 

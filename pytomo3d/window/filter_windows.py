@@ -95,7 +95,7 @@ def filter_windows_on_sensors(windows, stations, sensor_types, verbose=False):
                 # just use Z component instrument information
                 zchan = chan[:-1] + "Z"
                 _st = stations[zchan]["sensor"]
-            except:
+            except KeyError:
                 continue
             if is_right_sensor(_st, sensor_types):
                 sta_wins[chan] = chan_info

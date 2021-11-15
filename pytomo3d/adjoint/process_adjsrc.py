@@ -31,7 +31,7 @@ def calculate_baz(elat, elon, slat, slon):
     """
     _, _, baz = gps2dist_azimuth(elat, elon, slat, slon)
 
-    return baz
+    return baz % 360
 
 
 def change_channel_name(stream, channel_name):

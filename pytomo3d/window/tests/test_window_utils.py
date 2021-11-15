@@ -96,11 +96,11 @@ def test_sort_windows_on_channel():
                "II.AAK..LHZ": [1, 2, 3, 4]}
     sort_dict = wu.sort_windows_on_channel(sta_win)
     _true = {
-        'BH': {'nwins': 13, 'traces': ['II.AAK.10.BHR', 'II.AAK..BHZ',
-                                       'II.AAK.10.BHT', 'II.AAK.10.BHZ',
-                                       'II.AAK.00.BHZ']},
-        'EH': {'nwins': 14, 'traces': ['II.AAK..EHR', 'II.AAK.10.EHZ',
-                                       'II.AAK..EHZ']},
+        'BH': {'nwins': 13, 'traces': ['II.AAK..BHZ', 'II.AAK.00.BHZ',
+                                       'II.AAK.10.BHR', 'II.AAK.10.BHT',
+                                       'II.AAK.10.BHZ']},
+        'EH': {'nwins': 14, 'traces': ['II.AAK..EHR', 'II.AAK..EHZ',
+                                       'II.AAK.10.EHZ']},
         'LH': {'nwins': 4, 'traces': ['II.AAK..LHZ']}}
     assert sort_dict == _true
 
@@ -109,7 +109,7 @@ def test_sort_windows_on_channel_2():
     sta_win = {"II.AAK.10.BHZ": [], "II.AAK.10.BHR": [1, 2, 3, 4]}
     sort_dict = wu.sort_windows_on_channel(sta_win)
     _true = {
-        "BH": {"nwins": 4, "traces": ["II.AAK.10.BHZ", "II.AAK.10.BHR"]}
+        "BH": {"nwins": 4, "traces": ["II.AAK.10.BHR", "II.AAK.10.BHZ"]}
     }
     assert sort_dict == _true
 

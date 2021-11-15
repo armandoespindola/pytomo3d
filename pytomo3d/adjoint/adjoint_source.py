@@ -120,7 +120,7 @@ def calculate_adjsrc_on_stream(observed, synthetic, windows, config,
 
         try:
             obs = observed.select(id=obsd_id)[0]
-        except:
+        except KeyError:
             raise ValueError("Missing observed trace for window: %s" % obsd_id)
 
         if synt_id == "UNKNOWN":

@@ -24,7 +24,7 @@ def load_window_config_yaml(filename):
     :return:
     """
     with open(filename) as fh:
-        data = yaml.load(fh)
+        data = yaml.safe_load(fh)
 
     if data["min_period"] > data["max_period"]:
         raise ValueError("min_period is larger than max_period in config "

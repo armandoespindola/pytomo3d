@@ -20,7 +20,7 @@ def load_adjoint_config_yaml(filename):
     load yaml and setup pyadjoint.Config object
     """
     with open(filename) as fh:
-        data = yaml.load(fh)
+        data = yaml.safe_load(fh)
 
     adjsrc_type = data["adj_src_type"]
     data.pop("adj_src_type")
@@ -53,15 +53,12 @@ def _extract_window_id(windows):
     for _win in windows:
         if isinstance(_win, dict):
             obs_id = _win["channel_id"]
-            try:
-                syn_id = _win["channel_id_2"]
-            except:
-                syn_id = "UNKNOWN"
+            syn_id = _win.get("channel_id_2", "UNKNOWN")
         else:
             obs_id = _win.channel_id
             try:
                 syn_id = _win.channel_id_2
-            except:
+            except AttributeError:
                 syn_id = "UNKNOWN"
         obs_ids.append(obs_id)
         syn_ids.append(syn_id)

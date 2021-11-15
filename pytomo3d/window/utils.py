@@ -87,6 +87,7 @@ def sort_windows_on_channel(sta_win):
         if chan not in sort_dict:
             sort_dict[chan] = {"traces": [], "nwins": 0}
         sort_dict[chan]["traces"].append(trace_id)
+        sort_dict[chan]["traces"].sort()
         sort_dict[chan]["nwins"] += len(trace_win)
 
     return sort_dict

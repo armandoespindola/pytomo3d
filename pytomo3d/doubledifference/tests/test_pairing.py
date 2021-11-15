@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
-
-
-
 from pytomo3d.doubledifference.pairing import (create_all_pairs,
                                                close_pairs,
                                                similar_pairs,
@@ -71,7 +67,7 @@ def locations():
 
 
 @pytest.fixture
-def windowed_data():
+def windowed_data(windows):
     sample_data = {}
     times = np.linspace(-50, 50, 100)
     data = [
@@ -80,7 +76,7 @@ def windowed_data():
         np.exp(-(times-10)),
         np.exp(-(times-30))
     ]
-    all_windows = windows()
+    all_windows = windows
     for window, window_data in zip(list(all_windows["Z"].keys()), data):
         sample_data[window] = window_data
     return sample_data

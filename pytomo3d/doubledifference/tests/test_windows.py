@@ -31,8 +31,8 @@ def windows_data():
 
 
 @pytest.fixture
-def comp_win_data():
-    return component_based_windows_data(windows_data())
+def comp_win_data(windows_data):
+    return component_based_windows_data(windows_data)
 
 
 def test_comp_based_windows_data(windows_data):

@@ -225,9 +225,10 @@ def window_on_stream(observed, synthetic, config_dict, station=None,
             # then it is channel
             obs = observed.select(channel=category)
         else:
-            raise ValueError("The length of Config_dict.keys()[%s] should be "
-                             "either 1 or 3, for example, ['E', 'N', 'Z'] "
-                             "or ['BHE', 'BHN', 'BHZ']" % list(config_dict.keys()))
+            raise ValueError(
+                "The length of Config_dict.keys()[%s] should be "
+                "either 1 or 3, for example, ['E', 'N', 'Z'] "
+                "or ['BHE', 'BHN', 'BHZ']" % list(config_dict.keys()))
 
         for obs_tr in obs:
             component = obs_tr.stats.channel[-1]

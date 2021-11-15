@@ -158,7 +158,7 @@ def asdf_adj_to_adjoint(a):
     """
     try:
         net, sta = a.parameters["station_id"].split(".")
-    except:
+    except ValueError:
         net, sta = a.parameters["station_id"].split("_")
 
     c = AdjointSource(a.parameters["adjoint_source_type"],

@@ -21,7 +21,8 @@ def safe_load_staxml(staxmlfile):
     try:
         inv = read_inventory(staxmlfile)
     except Exception as exp:
-        raise "Failed to parse staxml file(%s) due to: %s"
+        raise "Failed to parse staxml file(%s) due to: %s" % (
+            staxmlfile, exp)
     return inv
 
 
