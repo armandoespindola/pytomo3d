@@ -9,12 +9,13 @@ class PyTest(test_command):
 
     def initialize_options(self):
         test_command.initialize_options(self)
-        self.pytest_args = []
+        self.pytest_args = ""
 
     def run_tests(self):
         import pytest
-        errno = pytest.main(self.pytest_args)
+        errno = pytest.main(self.pytest_args.split(" "))
         sys.exit(errno)
+
 
 setup(
     name="pytomo3d",
@@ -38,7 +39,7 @@ setup(
         "Operating System :: POSIX",
         "Operating System :: Microsoft :: Windows",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: Implementation :: CPython",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Physics",
