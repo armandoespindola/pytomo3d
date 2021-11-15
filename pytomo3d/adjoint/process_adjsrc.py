@@ -160,9 +160,10 @@ def zero_padding_stream(stream, starttime, endtime):
         tr_starttime = tr.stats.starttime
         tr_endtime = tr.stats.endtime
 
-        npts_before = int((tr_starttime - starttime) / dt) + 1
+        # NOTE: add more points to avoid precision issues
+        npts_before = int((tr_starttime - starttime) / dt) + 5
         npts_before = max(npts_before, 0)
-        npts_after = int((endtime - tr_endtime) / dt) + 1
+        npts_after = int((endtime - tr_endtime) / dt) + 5
         npts_after = max(npts_after, 0)
 
         # recalculate the time for padding trace
