@@ -322,6 +322,13 @@ def interp_adj_stream(adj_stream, interp_starttime=None, interp_delta=None,
                            starttime=interp_starttime,
                            npts=interp_npts)
 
+    # check if interpolation is nan
+    for adj_tr in adj_stream:
+        array=np.isnan(adj_tr.data)
+        if np.any(array):
+            adj_tr.data[array[:]] = 0.0
+#            print(" #######################",adj_tr.stats.network,adj_tr.stats.station,np.any(np.isnan(adj_tr.data)))
+
 
 def process_adjoint(adjsrcs, interp_flag=False, interp_starttime=None,
                     interp_delta=None, interp_npts=None,

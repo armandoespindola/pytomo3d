@@ -50,12 +50,15 @@ def extract_staxml_info(staxml):
                 instruments[key]["longitude"] = chan.longitude
                 instruments[key]["elevation"] = chan.elevation
                 instruments[key]["depth"] = chan.depth
-                if chan.sensor.description is not None:
-                    sensor_type = chan.sensor.description
-                elif chan.sensor.type is not None:
-                    sensor_type = chan.sensor.type
+                if (chan.code[:2] == "MX"):
+                    sensor_type="None"
                 else:
-                    sensor_type = "None"
+                    if chan.sensor.description is not None:
+                        sensor_type = chan.sensor.description
+                    elif chan.sensor.type is not None:
+                        sensor_type = chan.sensor.type
+                    else:
+                        sensor_type = "None"
                 instruments[key]["sensor"] = sensor_type
 
     return instruments
